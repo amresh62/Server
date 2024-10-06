@@ -19,11 +19,11 @@ import jakarta.servlet.http.HttpServletRequest;
 public class JwtUtil {
 
     private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    
+
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userDetails.getUsername());
-    }    
+    }
 
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
@@ -42,7 +42,7 @@ public class JwtUtil {
 
     public String getUsernameFromToken(String token) {
         return extractAllClaims(token).getSubject();
-    }   
+    }
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
@@ -60,7 +60,7 @@ public class JwtUtil {
         final String authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            return authorizationHeader.substring(7);  // Remove "Bearer " from token
+            return authorizationHeader.substring(7); // Remove "Bearer " from token
         }
         return null;
     }

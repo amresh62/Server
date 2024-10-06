@@ -21,6 +21,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import com.kamjritztex.aoms.models.Role;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -70,7 +72,17 @@ public class WebSecurityConfig {
                                 .authorizeHttpRequests(requests -> requests
                                                 // .requestMatchers(HttpMethod.GET, "/**").authenticated()
                                                 .requestMatchers(HttpMethod.GET, "/api/notifications/**").permitAll()
-                                                .requestMatchers(HttpMethod.GET, "/**").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/api/audit-logs/**").hasAuthority(Role.ADMIN.toString())
+                                                .requestMatchers(HttpMethod.POST, "/api/audit-logs/**").hasAuthority(Role.ADMIN.toString())
+                                                .requestMatchers(HttpMethod.PUT, "/api/audit-logs/**").hasAuthority(Role.ADMIN.toString())
+                                                .requestMatchers(HttpMethod.DELETE, "/api/audit-logs/**").hasAuthority(Role.ADMIN.toString())
+                                                .requestMatchers(HttpMethod.POST, "/api/notifications/**").hasAnyAuthority(Role.USER.toString(),Role.SUPER_ADMIN.toString(),Role.ADMIN.toString())
+                                                .requestMatchers(HttpMethod.PUT, "/api/notifications/**").hasAnyAuthority(Role.USER.toString(),Role.SUPER_ADMIN.toString(),Role.ADMIN.toString())
+                                                .requestMatchers(HttpMethod.DELETE, "/api/notifications/**").hasAnyAuthority(Role.USER.toString(),Role.SUPER_ADMIN.toString(),Role.ADMIN.toString())
+                                                .requestMatchers(HttpMethod.GET,"/api/offboarding/**").hasAnyAuthority(Role.USER.toString(),Role.SUPER_ADMIN.toString(),Role.ADMIN.toString())
+                                                .requestMatchers(HttpMethod.POST, "/api/offboarding/**").hasAnyAuthority(Role.USER.toString(),Role.SUPER_ADMIN.toString(),Role.ADMIN.toString())
+                                                .requestMatchers(HttpMethod.PUT, "/api/offboarding/**").hasAnyAuthority(Role.USER.toString(),Role.SUPER_ADMIN.toString(),Role.ADMIN.toString())
+                                                .requestMatchers(HttpMethod.DELETE, "/api/offboarding/**").hasAnyAuthority(Role.USER.toString(),Role.SUPER_ADMIN.toString(),Role.ADMIN.toString())
                                                 .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
 
                                                 .anyRequest().authenticated() // Authenticate all other requests
